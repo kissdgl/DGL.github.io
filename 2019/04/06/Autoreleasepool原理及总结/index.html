@@ -7,13 +7,17 @@
   
   <title>不予回答</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="Autoreleasepool原理及总结 原理:显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和exit时调用pop方法, 然后依次对autorelease对象发送re">
+<meta property="og:type" content="article">
 <meta property="og:title" content="不予回答">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/04/06/Autoreleasepool原理及总结/index.html">
 <meta property="og:site_name" content="不予回答">
+<meta property="og:description" content="Autoreleasepool原理及总结 原理:显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和exit时调用pop方法, 然后依次对autorelease对象发送re">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-06T07:47:10.568Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="不予回答">
+<meta name="twitter:description" content="Autoreleasepool原理及总结 原理:显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和exit时调用pop方法, 然后依次对autorelease对象发送re">
   
     <link rel="alternate" href="/atom.xml" title="不予回答" type="application/atom+xml">
   
@@ -60,9 +64,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-Autoreleasepool原理及总结" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Autoreleasepool原理及总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/04/06/Autoreleasepool原理及总结/" class="article-date">
   <time datetime="2019-04-06T07:46:15.946Z" itemprop="datePublished">2019-04-06</time>
@@ -120,11 +122,9 @@ NSLog(@&quot;person = %@&quot;, person_weak);
     </footer>
   </div>
   
-</article>
-
-
+    
   
-
+</article>
 
 </section>
         
