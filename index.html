@@ -300,7 +300,8 @@
       
         
           
-            <h1 id="Autoreleasepool原理及总结"><a href="#Autoreleasepool原理及总结" class="headerlink" title="Autoreleasepool原理及总结"></a>Autoreleasepool原理及总结</h1><blockquote>
+            <p>title: <br>date: 2008<br>categories:<br>tags:</p>
+<h1 id="Autoreleasepool原理及总结"><a href="#Autoreleasepool原理及总结" class="headerlink" title="Autoreleasepool原理及总结"></a>Autoreleasepool原理及总结</h1><blockquote>
 <p>原理:<br>显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一<br>隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和exit时调用pop方法, 然后依次对autorelease对象发送release消息, 使对象的引用计数器减一</p>
 </blockquote>
 <p><strong>测试代码:</strong></p>
