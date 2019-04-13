@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang>
+<html class="theme-next pisces use-motion" lang>
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="title: date: 2008categories:tags: Autoreleasepool原理及总结 原理:显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和ex">
+<meta name="description" content="Autoreleasepool原理及总结 原理:显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和exit时调用pop方法, 然后依次对autorelease对象发送re">
 <meta property="og:type" content="article">
-<meta property="og:title" content="不予回答">
-<meta property="og:url" content="http://yoursite.com/2019/04/06/Autoreleasepool原理及总结/index.html">
+<meta property="og:title" content="Autoreleasepool原理及总结">
+<meta property="og:url" content="http://yoursite.com/2016/04/13/Autoreleasepool原理及总结/index.html">
 <meta property="og:site_name" content="不予回答">
-<meta property="og:description" content="title: date: 2008categories:tags: Autoreleasepool原理及总结 原理:显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和ex">
+<meta property="og:description" content="Autoreleasepool原理及总结 原理:显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和exit时调用pop方法, 然后依次对autorelease对象发送re">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-13T05:07:55.976Z">
+<meta property="og:updated_time" content="2019-04-13T06:48:00.890Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="不予回答">
-<meta name="twitter:description" content="title: date: 2008categories:tags: Autoreleasepool原理及总结 原理:显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和ex">
+<meta name="twitter:title" content="Autoreleasepool原理及总结">
+<meta name="twitter:description" content="Autoreleasepool原理及总结 原理:显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和exit时调用pop方法, 然后依次对autorelease对象发送re">
 
 
 
@@ -97,7 +97,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Pisces',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/06/Autoreleasepool原理及总结/">
+  <link rel="canonical" href="http://yoursite.com/2016/04/13/Autoreleasepool原理及总结/">
 
 
 
 
 
-  <title> | 不予回答</title>
+  <title>Autoreleasepool原理及总结 | 不予回答</title>
   
 
 
@@ -160,7 +160,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">一个无趣的人</p>
       
   </div>
 
@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/06/Autoreleasepool原理及总结/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/13/Autoreleasepool原理及总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="不予回答">
@@ -249,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">Autoreleasepool原理及总结</h1>
         
 
         <div class="post-meta">
@@ -261,8 +261,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-06T15:46:15+08:00">
-                2019-04-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-13T14:46:37+08:00">
+                2016-04-13
               </time>
             
 
@@ -299,8 +299,7 @@
       
 
       
-        <p>title: <br>date: 2008<br>categories:<br>tags:</p>
-<h1 id="Autoreleasepool原理及总结"><a href="#Autoreleasepool原理及总结" class="headerlink" title="Autoreleasepool原理及总结"></a>Autoreleasepool原理及总结</h1><blockquote>
+        <h1 id="Autoreleasepool原理及总结"><a href="#Autoreleasepool原理及总结" class="headerlink" title="Autoreleasepool原理及总结"></a>Autoreleasepool原理及总结</h1><blockquote>
 <p>原理:<br>显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一<br>隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和exit时调用pop方法, 然后依次对autorelease对象发送release消息, 使对象的引用计数器减一</p>
 </blockquote>
 <p><strong>测试代码:</strong></p>
@@ -502,7 +501,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
 
 
 
@@ -601,6 +600,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
