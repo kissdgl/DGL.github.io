@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="不予回答">
 <meta property="og:description" content="Autoreleasepool原理及总结 原理:显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和exit时调用pop方法, 然后依次对autorelease对象发送re">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-13T05:03:52.893Z">
+<meta property="og:updated_time" content="2019-04-13T05:01:09.482Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="不予回答">
 <meta name="twitter:description" content="Autoreleasepool原理及总结 原理:显式的autoreleasepool, 会自动将autorelease对象添加到autoreleasepool中, 在出了作用域后,会依次发送release消息, 让对象引用计数器减一隐式的autoreleasepool, 会在runloop beforeWaiting(休眠)和exit时调用pop方法, 然后依次对autorelease对象发送re">
@@ -318,19 +318,24 @@
 <p><strong>注意:</strong></p>
 <ul>
 <li>若创建出来的string对象为Tagged Pointer指针(如:@”a”), 则没有引用计数器概念, 无论哪种场景, 都能打印出来(@”a”)</li>
-<li>若string对象是直接赋值的,如:<br>NSString *string = @”dingguilin342”, 而不是通过[NSString stringWithFormat:@”dingguilin342”]来创建的, 则无论哪种场景, 都能打印出结果”dingguilin342”, 猜测是直接赋值的string保存在系统的常量区, 不会被释放掉(待确认)</li>
+<li><p>若string对象是直接赋值的,如:</p>
+<figure class="highlight plain"><figcaption><span>*string </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**隐式autoreleasepool:**</span><br><span class="line"></span><br><span class="line">苹果在主线程runloop里面注册了两个observer, 第一个监听Entry状态(runloop即将进入), 会调用autoreleasepoolPush创建自动释放池,优先级最高,</span><br><span class="line">第二个监听beforeWaiting状态,调用autoreleasepoolPop来释放之前的自动释放池,紧接着再调用autoreleasepoolPush创建一个新的自动释放池,第二个同时监听了Exit状态,在runloop即将退出的时候调用autoreleasepoolPop来释放自动释放池. 一个自动释放池从进入到退出push和pop刚好能配对</span><br><span class="line"></span><br><span class="line">**哪些对象会自动加入到autoreleasepool中?**</span><br><span class="line">&gt;alloc, new, copy, mutableCopy开头创建出来的对象编译器会自动添加release</span><br><span class="line">&gt;其他方式创建出来的对象编译器会自动添加autorelease</span><br><span class="line">&gt;若使用__autoreleasing修饰的,就算是alloc new等创建出来的也会加入到自动释放池</span><br><span class="line"></span><br><span class="line">**验证代码：**</span><br></pre></td></tr></table></figure>
+<p>  <strong>weak NSObject *string_weak_ = nil;
+  </strong>weak Person *person_weak = nil;<br>  @autoreleasepool {</p>
+<pre><code>//情况1
+string_weak_ = [[NSString alloc] init];
+person_weak = [[Person alloc] init];
+
+//情况2
+</code></pre><p>//        string_weak_ = [NSString stringWithFormat:@”afdasdfasfdasfas”];<br>//        person_weak = [Person person];</p>
+<pre><code>NSLog(@&quot;string = %@&quot;, string_weak_);
+NSLog(@&quot;person = %@&quot;, person_weak);
+</code></pre><p>  }<br>  NSLog(@”string = %@”, string_weak_);<br>  NSLog(@”person = %@”, person_weak);</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**结果：**</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
-<p><strong>隐式autoreleasepool:</strong></p>
-<p>苹果在主线程runloop里面注册了两个observer, 第一个监听Entry状态(runloop即将进入), 会调用autoreleasepoolPush创建自动释放池,优先级最高,<br>第二个监听beforeWaiting状态,调用autoreleasepoolPop来释放之前的自动释放池,紧接着再调用autoreleasepoolPush创建一个新的自动释放池,第二个同时监听了Exit状态,在runloop即将退出的时候调用autoreleasepoolPop来释放自动释放池. 一个自动释放池从进入到退出push和pop刚好能配对</p>
-<p><strong>哪些对象会自动加入到autoreleasepool中?</strong></p>
-<blockquote>
-<p>alloc, new, copy, mutableCopy开头创建出来的对象编译器会自动添加release<br>其他方式创建出来的对象编译器会自动添加autorelease<br>若使用__autoreleasing修饰的,就算是alloc new等创建出来的也会加入到自动释放池</p>
-</blockquote>
-<p><strong>验证代码：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">    __weak NSObject *string_weak_ = nil;</span><br><span class="line">    __weak Person *person_weak = nil;</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">        //情况1</span><br><span class="line">        string_weak_ = [[NSString alloc] init];</span><br><span class="line">        person_weak = [[Person alloc] init];</span><br><span class="line">        </span><br><span class="line">        //情况2</span><br><span class="line">//        string_weak_ = [NSString stringWithFormat:@&quot;afdasdfasfdasfas&quot;];</span><br><span class="line">//        person_weak = [Person person];</span><br><span class="line">        NSLog(@&quot;string = %@&quot;, string_weak_);</span><br><span class="line">        NSLog(@&quot;person = %@&quot;, person_weak);</span><br><span class="line">    &#125;</span><br><span class="line">    NSLog(@&quot;string = %@&quot;, string_weak_);</span><br><span class="line">    NSLog(@&quot;person = %@&quot;, person_weak);</span><br></pre></td></tr></table></figure>
-<p><strong>结果：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//情况1</span><br><span class="line">2018-09-06 22:45:47.525427+0800 DGLDemo2[15480:802763] string =</span><br><span class="line">2018-09-06 22:45:47.525609+0800 DGLDemo2[15480:802763] person = (null)</span><br><span class="line">2018-09-06 22:45:47.525748+0800 DGLDemo2[15480:802763] string =</span><br><span class="line">2018-09-06 22:45:47.525844+0800 DGLDemo2[15480:802763] person = (null)</span><br><span class="line"></span><br><span class="line">//情况2</span><br><span class="line">2018-09-06 22:47:13.161923+0800 DGLDemo2[15512:804750] string = afdasdfasfdasfas</span><br><span class="line">2018-09-06 22:47:13.162146+0800 DGLDemo2[15512:804750] person = &lt;Person: 0x60400001add0&gt;</span><br><span class="line">2018-09-06 22:47:13.162271+0800 DGLDemo2[15512:804750] string = (null)</span><br><span class="line">2018-09-06 22:47:13.162395+0800 DGLDemo2[15512:804750] person = (null)</span><br></pre></td></tr></table></figure>
-<p><strong>分析:</strong></p>
+<p>//情况1<br>2018-09-06 22:45:47.525427+0800 DGLDemo2[15480:802763] string =<br>2018-09-06 22:45:47.525609+0800 DGLDemo2[15480:802763] person = (null)<br>2018-09-06 22:45:47.525748+0800 DGLDemo2[15480:802763] string =<br>2018-09-06 22:45:47.525844+0800 DGLDemo2[15480:802763] person = (null)</p>
+<p>//情况2<br>2018-09-06 22:47:13.161923+0800 DGLDemo2[15512:804750] string = afdasdfasfdasfas<br>2018-09-06 22:47:13.162146+0800 DGLDemo2[15512:804750] person = &lt;Person: 0x60400001add0&gt;<br>2018-09-06 22:47:13.162271+0800 DGLDemo2[15512:804750] string = (null)<br>2018-09-06 22:47:13.162395+0800 DGLDemo2[15512:804750] person = (null)<br><code>`</code><br><strong>分析:</strong></p>
 <p>编译器加了autorelease后引用计数器会+1，所以block里面打印出来有值， 若编译器没有加autorelease，引用计数器为0，打印出来为空</p>
 <p>参考文章:<br><a href="http://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementation-principle/" target="_blank" rel="noopener">http://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementation-principle/</a></p>
 
